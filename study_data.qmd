@@ -1,0 +1,25 @@
+
+
+# Study Data
+
+Here you will find the current dataset for each sample within the meta-analysis. You can download a CSV version of the database or the PDF of the codebook with the links below:
+
+{{< downloadthis study_data.csv dname="UTMEmeta_study_data" label="Download Study Data" icon="download" type="info" >}}
+
+{{< downloadthis codebook.pdf dname="UTMEmeta_codebook" label="Download Code-book" icon="file-pdf" type="info" >}}
+
+<br>
+
+## Full Database
+
+```{r,echo=FALSE}
+library(knitr)
+df <- read.csv('study_data.csv')
+df <- df[,-4]
+kable(df)
+```
+
+
+
+
+

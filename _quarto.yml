@@ -1,0 +1,26 @@
+project:
+  type: website
+
+website:
+  title: "U.T.M.E. Validity Meta-Analysis"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Summary & Results
+      - href: methods.qmd
+        text: Methods
+      - href: search.qmd
+        text: Search Results
+      - href: study_data.qmd
+        text: Study Data
+      - href: contribute.qmd
+        text: Contribute
+
+format:
+  html:
+    theme: darkly
+    css: styles.css
+    toc: false
+
+editor: visual
+

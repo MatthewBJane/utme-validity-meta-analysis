@@ -1,0 +1,236 @@
+---
+title: "Predictive Validity of the Unified Tertiary Matriculation Examination on University Grades"
+subtitle: "A Validity Generalization Meta-Analysis"
+toc: true
+author: 
+  - name: Matthew B. Jané
+    affiliation:
+      - name: University of Connecticut
+  - name: James Uanhoro
+    affiliation:
+      - name: University of North Texas
+  - name: Blair T. Johnson
+    affiliation:
+      - name: University of Connecticut
+  
+description: "The Unified Tertiary Matriculation Examination (UTME) is a standardized test used for university admissions decisions in Nigeria. The examination is administered by the Joint Admissions and Matriculation Board (JAMB). The validity of the UTME in predicting academic performance has been investigated extensively in the literature, therefore this meta-analysis aims to synthesize the current validity evidence. This open-source web-page consists of the results, methodology, and data for a real-time updating meta-analytic database."
+---
+
+## Current Results
+
+## Missing Artifact Values
+
+### Inter
+
+```{r,echo=FALSE,message=FALSE,results='asis',}
+
+library(psychmeta)
+library(knitr)
+df <- read.csv('study_data.csv')
+
+###################################################
+# analyze data set from Popoola (2018) ############
+###################################################
+n <- c()
+ave_ryiyj <- c()
+for(i in 1:7){
+  ryy_data <- readxl::read_xlsx('raw-data/popoola2018_gpa_only.xlsx',sheet = i)
+  yiyj <- ryy_data[,c('First Year GPA','Second Year GPA','Third Year GPA','Fourth Year GPA','Fifth Year GPA')]
+  cor_mat <- cor(yiyj)
+  diag(cor_mat) <- NA
+  ave_ryiyj[i] <- mean(cor_mat,na.rm=T)
+  n[i] <- nrow(ryy_data)
+}
+
+
+
+###################################################
+# analyze data set from Owolabi (2018) ############
+###################################################
+
+  ryy_data <- readxl::read_xlsx('raw-data/owolabi2018.xlsx',sheet = 1)
+  yiyj <- ryy_data[,c('First Year GPA','Second Year GPA','Third Year GPA','Fourth Year GPA')]
+  cor_mat <- cor(yiyj)
+  diag(cor_mat) <- NA
+  ave_ryiyj <- c(ave_ryiyj, mean(cor_mat,na.rm=T))
+  n <- c(n,nrow(ryy_data))
+  
+  
+  
+reliability <- data.frame(
+  discipline = c('Chemical Engineering', 'Civil Engineering', 'Computer Engineering', 'Electrical Engineering', 'Info. and Comm. Engineering', 'Mechanical Engineering', 'Petroleum Engineering','Accounting', df$discipline[!is.na(df$ave_ryiyj)]),
+  n = c(n,df$n[!is.na(df$ave_ryiyj)]),
+  ave_ryiyj = round(c(ave_ryiyj,df$ave_ryiyj[!is.na(df$ave_ryiyj)]),3)
+)
+
+
+# calculate n-weighted mean of inter-grade correlations
+mean_ryiyj <- weighted.mean(x = reliability$ave_ryiyj,
+                           w = reliability$n,
+                           na.rm = T)
+
+
+reliability_table <- rbind(reliability,c('\\textbf{WEIGHTED MEAN}',sum(reliability$n),round(mean_ryiyj,3)))
+
+names(reliability_table) <- c('Discipline', '$N$','$\\bar{r}_{y_iy_j}$')
+
+kable(reliability_table,align = 'lcc',digits = 3, booktabs = T)
+```
+
+#### Reliability
+
+```{r,echo=FALSE,message=FALSE,results='asis',warning=FALSE}
+
+k = 1:5
+rYY = c()
+for(i in k){
+  rYY[i] <- mean_ryiyj*i / (1+mean_ryiyj*(i-1))
+} 
+
+rYY_table <- data.frame(k,rYY)
+names(rYY_table) <- c('$\\kappa$','$r_{YY\'}$')
+
+kable(rYY_table,align = 'cc',digits = 3) 
+```
+
+### Full Meta-Analysis
+
+#### Bare Bones Model (No Correction)
+
+```{r,echo=FALSE,message=FALSE,results='asis'}
+
+rYY <- df$ave_ryiyj*df$k_grades / (1+df$ave_ryiyj*(df$k_grades-1))
+df <- cbind(df,rYY)
+
+admitted_all <- c(3708,29485,130865,257902,87988,10796,5628,0)
+admitted_uni <- c(3708,29485,130865,257902,87988,0,0,0)
+applicants <- c(5833,59494,320430,830866,407300,79837,80746,51874)
+utme_score <- c(350,274.5,224.5,179.5,149.5,129.5,109.5,49.5)
+
+SDapplicants <- sd(rep(utme_score,applicants))
+SDadmitted_uni <- sd(rep(utme_score,admitted_uni))
+SDadmitted_all <- sd(rep(utme_score,admitted_all))
+
+df$sd_utme[is.na(df$sd_utme) & df$institution_type != "university"] <- SDadmitted_all
+df$sd_utme[is.na(df$sd_utme) & df$institution_type == "university"] <- SDadmitted_uni
+ux <- df$sd_utme / SDapplicants
+df <- cbind(df,ux)
+
+df$rxY[is.na(df$rxY)] <- composite_r_scalar(mean_rxy = df$ave_rxyj[is.na(df$rxY)], 
+                                            k_vars_y = df$k_grades[is.na(df$rxY)], 
+                                            mean_intercor_y = df$ave_ryiyj[is.na(df$rxY)])
+
+
+mdl<- ma_r_ic(data = df,
+              rxyi = rxY,
+              n = n,
+              ux = ux,
+              ryy = rYY,
+              wt_type = "PM",
+              correct_bias = TRUE,
+              correction_method = "uvirr_x"
+              )
+
+```
+
+```{r,echo=FALSE,message=FALSE,results='asis'}
+summary_table <- data.frame(
+  k = mdl$meta_tables$`analysis_id: 1`$barebones[['k']],
+  N = mdl$meta_tables$`analysis_id: 1`$barebones[['N']],
+  mean_rho = mdl$meta_tables$`analysis_id: 1`$barebones[['mean_r']],
+  CI = paste0('[',round(mdl$meta_tables$`analysis_id: 1`$barebones[['CI_LL_95']],3),', ',
+              round(mdl$meta_tables$`analysis_id: 1`$barebones[['CI_UL_95']],3),']'),
+  sd_rho = mdl$meta_tables$`analysis_id: 1`$barebones[['sd_r']],
+  CI = paste0('[',round(mdl$meta_tables$`analysis_id: 1`$barebones[['CR_LL_80']],3),', ',
+              round(mdl$meta_tables$`analysis_id: 1`$barebones[['CR_UL_80']],3),']')
+)
+names(summary_table) <- c("$k$","$N$","   $\\bar{r}$   ","$95\\% \\; CI$","$SD_r$","$90\\% \\; CR$")
+
+kable(summary_table,align = 'cccccc',digits=3)
+
+```
+
+#### Artifact Correction Model
+
+```{r,echo=FALSE,message=FALSE,results='asis'}
+
+summary_table <- data.frame(
+  k = mdl$meta_tables$`analysis_id: 1`$individual_correction$true_score[['k']],
+  N = mdl$meta_tables$`analysis_id: 1`$individual_correction$true_score[['N']],
+  mean_rho = mdl$meta_tables$`analysis_id: 1`$individual_correction$true_score[['mean_rho']],
+  CI = paste0('[',round(mdl$meta_tables$`analysis_id: 1`$individual_correction$true_score[['CI_LL_95']],3),', ',round(mdl$meta_tables$`analysis_id: 1`$individual_correction$true_score[['CI_UL_95']],3),']'),
+  sd_rho = mdl$meta_tables$`analysis_id: 1`$individual_correction$true_score[['sd_rho']],
+  CI = paste0('[',round(mdl$meta_tables$`analysis_id: 1`$individual_correction$true_score[['CR_LL_80']],3),', ',round(mdl$meta_tables$`analysis_id: 1`$individual_correction$true_score[['CR_UL_80']],3),']')
+)
+names(summary_table) <- c("$k$","$N$","$\\hat{\\bar{\\rho}}$","$95\\% \\; CI$","$SD_\\rho$", "$90\\% \\; CR$")
+
+kable(summary_table,align = 'cccccc',digits=3)
+
+
+```
+
+### Disciplines
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,results='asis'}
+mdl<- ma_r_ic(data = df,
+              rxyi = rxY,
+              n = n,
+              ux = ux,
+              ryy = rYY,
+              wt_type = "PM",
+              correct_bias = TRUE,
+              correction_method = "uvirr_x",
+              moderators = discipline_category,
+              control = control_psychmeta(cred_level = .90)
+              )
+
+summary_table <- as.data.frame(summary(mdl)$meta_tables$individual_correction$true_score)[, c('discipline_category','k','N','mean_rho','CI_LL_95','CI_UL_95','sd_rho','CR_LL_90','CR_UL_90')]
+
+names(summary_table) <- c("Discipline","$k$","$N$","$\\hat{\\bar{\\rho}}$", "$CI_{L95}$", "$CI_{U95}$","$SD_\\rho$", "$CR_{L90}$", "$CR_{U90}$")
+
+kable(summary_table,align = 'lccccc',digits=3)
+```
+
+### Computer Based UTME
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,results='asis'}
+mdl<- ma_r_ic(data = df,
+              rxyi = rxY,
+              n = n,
+              ux = ux,
+              ryy = rYY,
+              wt_type = "PM",
+              correct_bias = TRUE,
+              correction_method = "uvirr_x",
+              moderators = computer_based_utme,
+              control = control_psychmeta(cred_level = .90)
+              )
+
+summary_table <- as.data.frame(summary(mdl)$meta_tables$individual_correction$true_score)[, c('computer_based_utme','k','N','mean_rho','CI_LL_95','CI_UL_95','sd_rho','CR_LL_90','CR_UL_90')]
+
+names(summary_table) <- c("Computer Based","$k$","$N$","$\\hat{\\bar{\\rho}}$", "$CI_{L95}$", "$CI_{U95}$","$SD_\\rho$", "$CR_{L90}$", "$CR_{U90}$")
+
+kable(summary_table,align = 'lccccc',digits=3)
+```
+
+### Type of Institution
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,results='asis'}
+mdl<- ma_r_ic(data = df,
+              rxyi = rxY,
+              n = n,
+              ux = ux,
+              ryy = rYY,
+              wt_type = "PM",
+              correct_bias = TRUE,
+              correction_method = "uvirr_x",
+              moderators = institution_type,
+              control = control_psychmeta(cred_level = .90)
+              )
+
+summary_table <- as.data.frame(summary(mdl)$meta_tables$individual_correction$true_score)[, c('institution_type','k','N','mean_rho','CI_LL_95','CI_UL_95','sd_rho','CR_LL_90','CR_UL_90')]
+
+names(summary_table) <- c("Institution Type","$k$","$N$","$\\hat{\\bar{\\rho}}$", "$CI_{L95}$", "$CI_{U95}$","$SD_\\rho$", "$CR_{L90}$", "$CR_{U90}$")
+
+kable(summary_table,align = 'lccccc',digits=3)
+```

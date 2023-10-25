@@ -1,0 +1,15 @@
+
+# Contribute
+
+We encourage contributions of datasets and search results from
+
+
+## Contributing a Study Data
+
+To contribute one or more studies follow the steps below:
+
+1. Copy the csv file in Dataset-Contributions folder
+
+## Contributing a Search
+
+To contribute a list of search results, please provide 

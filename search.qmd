@@ -1,0 +1,16 @@
+
+# Search Results
+
+Here you will find the current search results and inclusion/exclusion decisions for all the studies in the meta-analysis.
+
+{{< downloadthis search_results.csv dname="UTMEmeta_study_data" label="Download Search Results as CSV" icon="download" type="info" >}}
+
+<br>
+
+## Search Results
+
+```{r,echo=FALSE}
+library(knitr)
+df <- read.csv('search_results.csv')
+kable(df,align = "clccccccc")
+```
