@@ -20,7 +20,7 @@ description: "The Unified Tertiary Matriculation Examination (UTME) is a standar
 
 ## Missing Artifact Values
 
-### Inter
+### Inter-Grade Correlations
 
 ```{r,echo=FALSE,message=FALSE,results='asis',}
 
