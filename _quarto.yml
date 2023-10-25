@@ -1,12 +1,11 @@
 project:
   type: website
-
 website:
   title: "U.T.M.E. Validity Meta-Analysis"
   navbar:
     left:
-      - href: index.qmd
-        text: Summary & Results
+      - text: Summary & Results
+        href: index.qmd
       - href: methods.qmd
         text: Methods
       - href: search.qmd
