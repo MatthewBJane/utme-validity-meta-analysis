@@ -16,11 +16,13 @@ author:
 description: "The Unified Tertiary Matriculation Examination (UTME) is a standardized test used for university admissions decisions in Nigeria. The examination is administered by the Joint Admissions and Matriculation Board (JAMB). The validity of the UTME in predicting academic performance has been investigated extensively in the literature, therefore this meta-analysis aims to synthesize the current validity evidence. This open-source web-page consists of the results, methodology, and data for a real-time updating meta-analytic database."
 ---
 
-## Current Results
+# Current Results
 
-## Missing Artifact Values
+## Imputing Missing Reliability
 
-### Inter-Grade Correlations
+The average inter-correlation between each year-end GPA ($\bar{r}_{y_iy_j}$; see Methods) and the number of years that the students attend college, $\kappa$, can be used to estimate the reliability of final cumulative GPA (CGPA) during their time in college. For example, a CGPA calculated from all four years of college is more reliable than a CGPA computed from just their first year in college. Since inter-grade correlations are rarely reported in primary studies, we can take the $N$-weighted average of available inter-grade correlations. Then we can use the number of years the CGPA is calculated from in each study and use those values to estimate the reliability of CGPA in the given study.
+
+#### Inter-Grade Correlations
 
 ```{r,echo=FALSE,message=FALSE,results='asis',}
 
@@ -70,14 +72,14 @@ mean_ryiyj <- weighted.mean(x = reliability$ave_ryiyj,
                            na.rm = T)
 
 
-reliability_table <- rbind(reliability,c('\\textbf{WEIGHTED MEAN}',sum(reliability$n),round(mean_ryiyj,3)))
+reliability_table <- rbind(reliability,c('WEIGHTED MEAN',sum(reliability$n),round(mean_ryiyj,3)))
 
-names(reliability_table) <- c('Discipline', '$N$','$\\bar{r}_{y_iy_j}$')
+names(reliability_table) <- c('Discipline', '$N$','Mean Inter-Year GPA Correlation ($\\bar{r}_{y_iy_j}$)')
 
 kable(reliability_table,align = 'lcc',digits = 3, booktabs = T)
 ```
 
-#### Reliability
+#### Estimated Reliability
 
 ```{r,echo=FALSE,message=FALSE,results='asis',warning=FALSE}
 
@@ -88,12 +90,14 @@ for(i in k){
 } 
 
 rYY_table <- data.frame(k,rYY)
-names(rYY_table) <- c('$\\kappa$','$r_{YY\'}$')
+names(rYY_table) <- c('# of Academic Years ($\\kappa$)','Estimated Reliability ($r_{YY\'}$)')
 
 kable(rYY_table,align = 'cc',digits = 3) 
 ```
 
-### Full Meta-Analysis
+## Full Meta-Analysis
+
+The full meta-analysis of all studies is reported below with an uncorrected (i.e., bare bones) and corrected version.
 
 #### Bare Bones Model (No Correction)
 
@@ -128,48 +132,40 @@ mdl<- ma_r_ic(data = df,
               ryy = rYY,
               wt_type = "PM",
               correct_bias = TRUE,
-              correction_method = "uvirr_x"
+              correction_method = "uvirr_x",
+              control = control_psychmeta(cred_level = .90)
               )
 
 ```
 
 ```{r,echo=FALSE,message=FALSE,results='asis'}
-summary_table <- data.frame(
-  k = mdl$meta_tables$`analysis_id: 1`$barebones[['k']],
-  N = mdl$meta_tables$`analysis_id: 1`$barebones[['N']],
-  mean_rho = mdl$meta_tables$`analysis_id: 1`$barebones[['mean_r']],
-  CI = paste0('[',round(mdl$meta_tables$`analysis_id: 1`$barebones[['CI_LL_95']],3),', ',
-              round(mdl$meta_tables$`analysis_id: 1`$barebones[['CI_UL_95']],3),']'),
-  sd_rho = mdl$meta_tables$`analysis_id: 1`$barebones[['sd_r']],
-  CI = paste0('[',round(mdl$meta_tables$`analysis_id: 1`$barebones[['CR_LL_80']],3),', ',
-              round(mdl$meta_tables$`analysis_id: 1`$barebones[['CR_UL_80']],3),']')
-)
-names(summary_table) <- c("$k$","$N$","   $\\bar{r}$   ","$95\\% \\; CI$","$SD_r$","$90\\% \\; CR$")
+summary_table <- as.data.frame(summary(mdl)$meta_tables$barebones)[, c('k','N','mean_r','CI_LL_95','CI_UL_95','sd_r','CR_LL_90','CR_UL_90')]
 
-kable(summary_table,align = 'cccccc',digits=3)
+names(summary_table) <- c("$k$","$N$","   $\\bar{r}$   ", "$CI_{L95}$", "$CI_{U95}$","$SD_r$", "$CR_{L90}$", "$CR_{U90}$")
 
+kable(summary_table,align = 'cccccccc',digits=3)
 ```
 
 #### Artifact Correction Model
 
 ```{r,echo=FALSE,message=FALSE,results='asis'}
 
-summary_table <- data.frame(
-  k = mdl$meta_tables$`analysis_id: 1`$individual_correction$true_score[['k']],
-  N = mdl$meta_tables$`analysis_id: 1`$individual_correction$true_score[['N']],
-  mean_rho = mdl$meta_tables$`analysis_id: 1`$individual_correction$true_score[['mean_rho']],
-  CI = paste0('[',round(mdl$meta_tables$`analysis_id: 1`$individual_correction$true_score[['CI_LL_95']],3),', ',round(mdl$meta_tables$`analysis_id: 1`$individual_correction$true_score[['CI_UL_95']],3),']'),
-  sd_rho = mdl$meta_tables$`analysis_id: 1`$individual_correction$true_score[['sd_rho']],
-  CI = paste0('[',round(mdl$meta_tables$`analysis_id: 1`$individual_correction$true_score[['CR_LL_80']],3),', ',round(mdl$meta_tables$`analysis_id: 1`$individual_correction$true_score[['CR_UL_80']],3),']')
-)
-names(summary_table) <- c("$k$","$N$","$\\hat{\\bar{\\rho}}$","$95\\% \\; CI$","$SD_\\rho$", "$90\\% \\; CR$")
+summary_table <- as.data.frame(summary(mdl)$meta_tables$individual_correction$true_score)[, c('k','N','mean_rho','CI_LL_95','CI_UL_95','sd_rho','CR_LL_90','CR_UL_90')]
 
-kable(summary_table,align = 'cccccc',digits=3)
+names(summary_table) <- c("$k$","$N$","$\\hat{\\bar{\\rho}}$", "$CI_{L95}$", "$CI_{U95}$","$SD_\\rho$", "$CR_{L90}$", "$CR_{U90}$")
+
+
+kable(summary_table,align = 'cccccccc',digits=3)
 
 
 ```
 
-### Disciplines
+## Moderators
+
+
+#### Disciplines
+
+College disciplines/majors are broken down into broad categories.
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE,results='asis'}
 mdl<- ma_r_ic(data = df,
@@ -191,7 +187,9 @@ names(summary_table) <- c("Discipline","$k$","$N$","$\\hat{\\bar{\\rho}}$", "$CI
 kable(summary_table,align = 'lccccc',digits=3)
 ```
 
-### Computer Based UTME
+#### Computer Based UTME
+
+Whether students took the computer-based UTME rather than the pen-and-paper version (pre-2014).
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE,results='asis'}
 mdl<- ma_r_ic(data = df,
@@ -213,7 +211,9 @@ names(summary_table) <- c("Computer Based","$k$","$N$","$\\hat{\\bar{\\rho}}$", 
 kable(summary_table,align = 'lccccc',digits=3)
 ```
 
-### Type of Institution
+#### Type of Institution
+
+Whether the institution is a university, polytechnic, or college of education.
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE,results='asis'}
 mdl<- ma_r_ic(data = df,

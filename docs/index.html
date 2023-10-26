@@ -123,14 +123,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#current-results" id="toc-current-results" class="nav-link active" data-scroll-target="#current-results">Current Results</a></li>
-  <li><a href="#missing-artifact-values" id="toc-missing-artifact-values" class="nav-link" data-scroll-target="#missing-artifact-values">Missing Artifact Values</a>
+  <li><a href="#current-results" id="toc-current-results" class="nav-link active" data-scroll-target="#current-results">Current Results</a>
   <ul class="collapse">
-  <li><a href="#inter-grade-correlations" id="toc-inter-grade-correlations" class="nav-link" data-scroll-target="#inter-grade-correlations">Inter-Grade Correlations</a></li>
+  <li><a href="#imputing-missing-reliability" id="toc-imputing-missing-reliability" class="nav-link" data-scroll-target="#imputing-missing-reliability">Imputing Missing Reliability</a></li>
   <li><a href="#full-meta-analysis" id="toc-full-meta-analysis" class="nav-link" data-scroll-target="#full-meta-analysis">Full Meta-Analysis</a></li>
-  <li><a href="#disciplines" id="toc-disciplines" class="nav-link" data-scroll-target="#disciplines">Disciplines</a></li>
-  <li><a href="#computer-based-utme" id="toc-computer-based-utme" class="nav-link" data-scroll-target="#computer-based-utme">Computer Based UTME</a></li>
-  <li><a href="#type-of-institution" id="toc-type-of-institution" class="nav-link" data-scroll-target="#type-of-institution">Type of Institution</a></li>
+  <li><a href="#moderators" id="toc-moderators" class="nav-link" data-scroll-target="#moderators">Moderators</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -190,20 +187,25 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="current-results" class="level2">
-<h2 class="anchored" data-anchor-id="current-results">Current Results</h2>
-</section>
-<section id="missing-artifact-values" class="level2">
-<h2 class="anchored" data-anchor-id="missing-artifact-values">Missing Artifact Values</h2>
-<section id="inter-grade-correlations" class="level3">
-<h3 class="anchored" data-anchor-id="inter-grade-correlations">Inter-Grade Correlations</h3>
+<section id="current-results" class="level1">
+<h1>Current Results</h1>
+<section id="imputing-missing-reliability" class="level2">
+<h2 class="anchored" data-anchor-id="imputing-missing-reliability">Imputing Missing Reliability</h2>
+<p>The average inter-correlation between each year-end GPA (<span class="math inline">\(\bar{r}_{y_iy_j}\)</span>; see Methods) and the number of years that the students attend college, <span class="math inline">\(\kappa\)</span>, can be used to estimate the reliability of final cumulative GPA (CGPA) during their time in college. For example, a CGPA calculated from all four years of college is more reliable than a CGPA computed from just their first year in college. Since inter-grade correlations are rarely reported in primary studies, we can take the <span class="math inline">\(N\)</span>-weighted average of available inter-grade correlations. Then we can use the number of years the CGPA is calculated from in each study and use those values to estimate the reliability of CGPA in the given study.</p>
+<section id="inter-grade-correlations" class="level4">
+<h4 class="anchored" data-anchor-id="inter-grade-correlations">Inter-Grade Correlations</h4>
 <div class="cell-output-display">
 <table class="table">
+<colgroup>
+<col style="width: 34%">
+<col style="width: 6%">
+<col style="width: 59%">
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Discipline</th>
 <th style="text-align: center;"><span class="math inline">\(N\)</span></th>
-<th style="text-align: center;"><span class="math inline">\(\bar{r}_{y_iy_j}\)</span></th>
+<th style="text-align: center;">Mean Inter-Year GPA Correlation (<span class="math inline">\(\bar{r}_{y_iy_j}\)</span>)</th>
 </tr>
 </thead>
 <tbody>
@@ -268,21 +270,22 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: center;">0.951</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"></td>
+<td style="text-align: left;">WEIGHTED MEAN</td>
 <td style="text-align: center;">2052</td>
 <td style="text-align: center;">0.738</td>
 </tr>
 </tbody>
 </table>
 </div>
-<section id="reliability" class="level4">
-<h4 class="anchored" data-anchor-id="reliability">Reliability</h4>
+</section>
+<section id="estimated-reliability" class="level4">
+<h4 class="anchored" data-anchor-id="estimated-reliability">Estimated Reliability</h4>
 <div class="cell-output-display">
 <table class="table">
 <thead>
 <tr class="header">
-<th style="text-align: center;"><span class="math inline">\(\kappa\)</span></th>
-<th style="text-align: center;"><span class="math inline">\(r_{YY'}\)</span></th>
+<th style="text-align: center;"># of Academic Years (<span class="math inline">\(\kappa\)</span>)</th>
+<th style="text-align: center;">Estimated Reliability (<span class="math inline">\(r_{YY'}\)</span>)</th>
 </tr>
 </thead>
 <tbody>
@@ -311,28 +314,33 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </section>
 </section>
-<section id="full-meta-analysis" class="level3">
-<h3 class="anchored" data-anchor-id="full-meta-analysis">Full Meta-Analysis</h3>
+<section id="full-meta-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="full-meta-analysis">Full Meta-Analysis</h2>
+<p>The full meta-analysis of all studies is reported below with an uncorrected (i.e., bare bones) and corrected version.</p>
 <section id="bare-bones-model-no-correction" class="level4">
 <h4 class="anchored" data-anchor-id="bare-bones-model-no-correction">Bare Bones Model (No Correction)</h4>
 <div class="cell-output-display">
 <table class="table">
 <colgroup>
-<col style="width: 7%">
-<col style="width: 10%">
-<col style="width: 24%">
-<col style="width: 23%">
-<col style="width: 11%">
-<col style="width: 23%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 20%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 9%">
+<col style="width: 14%">
+<col style="width: 14%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: center;"><span class="math inline">\(k\)</span></th>
 <th style="text-align: center;"><span class="math inline">\(N\)</span></th>
 <th style="text-align: center;"><span class="math inline">\(\bar{r}\)</span></th>
-<th style="text-align: center;"><span class="math inline">\(95\% \; CI\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(CI_{L95}\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(CI_{U95}\)</span></th>
 <th style="text-align: center;"><span class="math inline">\(SD_r\)</span></th>
-<th style="text-align: center;"><span class="math inline">\(90\% \; CR\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(CR_{L90}\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(CR_{U90}\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -340,9 +348,11 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: center;">31</td>
 <td style="text-align: center;">10675</td>
 <td style="text-align: center;">0.227</td>
-<td style="text-align: center;">[0.169, 0.285]</td>
+<td style="text-align: center;">0.169</td>
+<td style="text-align: center;">0.285</td>
 <td style="text-align: center;">0.157</td>
-<td style="text-align: center;">[0.046, 0.408]</td>
+<td style="text-align: center;">-0.008</td>
+<td style="text-align: center;">0.461</td>
 </tr>
 </tbody>
 </table>
@@ -353,21 +363,25 @@ ul.task-list li input[type="checkbox"] {
 <div class="cell-output-display">
 <table class="table">
 <colgroup>
-<col style="width: 6%">
-<col style="width: 9%">
-<col style="width: 26%">
+<col style="width: 5%">
+<col style="width: 7%">
 <col style="width: 21%">
-<col style="width: 14%">
-<col style="width: 21%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 12%">
+<col style="width: 13%">
+<col style="width: 13%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: center;"><span class="math inline">\(k\)</span></th>
 <th style="text-align: center;"><span class="math inline">\(N\)</span></th>
 <th style="text-align: center;"><span class="math inline">\(\hat{\bar{\rho}}\)</span></th>
-<th style="text-align: center;"><span class="math inline">\(95\% \; CI\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(CI_{L95}\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(CI_{U95}\)</span></th>
 <th style="text-align: center;"><span class="math inline">\(SD_\rho\)</span></th>
-<th style="text-align: center;"><span class="math inline">\(90\% \; CR\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(CR_{L90}\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(CR_{U90}\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -375,17 +389,22 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: center;">31</td>
 <td style="text-align: center;">10675</td>
 <td style="text-align: center;">0.268</td>
-<td style="text-align: center;">[0.203, 0.334]</td>
+<td style="text-align: center;">0.203</td>
+<td style="text-align: center;">0.334</td>
 <td style="text-align: center;">0.156</td>
-<td style="text-align: center;">[0.064, 0.473]</td>
+<td style="text-align: center;">0.003</td>
+<td style="text-align: center;">0.533</td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
 </section>
-<section id="disciplines" class="level3">
-<h3 class="anchored" data-anchor-id="disciplines">Disciplines</h3>
+<section id="moderators" class="level2">
+<h2 class="anchored" data-anchor-id="moderators">Moderators</h2>
+<section id="disciplines" class="level4">
+<h4 class="anchored" data-anchor-id="disciplines">Disciplines</h4>
+<p>College disciplines/majors are broken down into broad categories.</p>
 <div class="cell-output-display">
 <table class="table">
 <colgroup>
@@ -494,8 +513,9 @@ ul.task-list li input[type="checkbox"] {
 </table>
 </div>
 </section>
-<section id="computer-based-utme" class="level3">
-<h3 class="anchored" data-anchor-id="computer-based-utme">Computer Based UTME</h3>
+<section id="computer-based-utme" class="level4">
+<h4 class="anchored" data-anchor-id="computer-based-utme">Computer Based UTME</h4>
+<p>Whether students took the computer-based UTME rather than the pen-and-paper version (pre-2014).</p>
 <div class="cell-output-display">
 <table class="table">
 <colgroup>
@@ -560,8 +580,9 @@ ul.task-list li input[type="checkbox"] {
 </table>
 </div>
 </section>
-<section id="type-of-institution" class="level3">
-<h3 class="anchored" data-anchor-id="type-of-institution">Type of Institution</h3>
+<section id="type-of-institution" class="level4">
+<h4 class="anchored" data-anchor-id="type-of-institution">Type of Institution</h4>
+<p>Whether the institution is a university, polytechnic, or college of education.</p>
 <div class="cell-output-display">
 <table class="table">
 <colgroup>
@@ -627,6 +648,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 
 
+</section>
 </section>
 </section>
 

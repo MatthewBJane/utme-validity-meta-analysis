@@ -1,15 +1,13 @@
 
 # Contribute
 
-We encourage contributions of datasets and search results from
+We encourage contributions of datasets and search results! 
 
 
-## Contributing a Study Data
+## Contributing Study Data
 
-To contribute one or more studies follow the steps below:
-
-1. Copy the csv file in Dataset-Contributions folder
+To contribute one or more studies follow the steps below. Send link(s) to the article(s) to matthew.jane@uconn.edu. To submit a raw dataset as a CSV, you can send it via email (matthew.jane@uconn.edu) or by submitting a pull-request on [github]((https://github.com/MatthewBJane/utme-validity-meta-analysis)) to the folder titled [Dataset-Contributions][search_results.csv](https://github.com/MatthewBJane/utme-validity-meta-analysis/Dataset-Contributions).
 
 ## Contributing a Search
 
-To contribute a list of search results, please provide 
+To contribute a list of search results, please provide a CSV file formatted the same way as [search_results.csv](https://github.com/MatthewBJane/utme-validity-meta-analysis/search_results.csv) in the [github repository](https://github.com/MatthewBJane/utme-validity-meta-analysis). To submit the CSV, you can send it via email (matthew.jane@uconn.edu) or by submitting a pull-request to the folder titled [Search-Contributions][search_results.csv](https://github.com/MatthewBJane/utme-validity-meta-analysis/Search-Contributions).
