@@ -13,6 +13,9 @@ Here you will find the current dataset for each sample within the meta-analysis.
 ## Full Database
 
 ```{r,echo=FALSE}
+#| hover: true
+
+
 library(knitr)
 df <- read.csv('study_data.csv')
 df <- df[,-4]

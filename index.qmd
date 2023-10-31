@@ -24,7 +24,8 @@ The average inter-correlation between each year-end GPA ($\bar{r}_{y_iy_j}$; see
 
 #### Inter-Grade Correlations
 
-```{r,echo=FALSE,message=FALSE,results='asis',}
+```{r,echo=FALSE,message=FALSE,results='asis'}
+#| hover: true
 
 library(psychmeta)
 library(knitr)
@@ -76,12 +77,13 @@ reliability_table <- rbind(reliability,c('WEIGHTED MEAN',sum(reliability$n),roun
 
 names(reliability_table) <- c('Discipline', '$N$','Mean Inter-Year GPA Correlation ($\\bar{r}_{y_iy_j}$)')
 
-kable(reliability_table,align = 'lcc',digits = 3, booktabs = T)
+kable(reliability_table,align = 'lcc',digits = 3, booktabs = TRUE)
 ```
 
 #### Estimated Reliability
 
 ```{r,echo=FALSE,message=FALSE,results='asis',warning=FALSE}
+#| hover: true
 
 k = 1:5
 rYY = c()
@@ -102,6 +104,7 @@ The full meta-analysis of all studies is reported below with an uncorrected (i.e
 #### Bare Bones Model (No Correction)
 
 ```{r,echo=FALSE,message=FALSE,results='asis'}
+#| hover: true
 
 rYY <- df$ave_ryiyj*df$k_grades / (1+df$ave_ryiyj*(df$k_grades-1))
 df <- cbind(df,rYY)
@@ -139,6 +142,8 @@ mdl<- ma_r_ic(data = df,
 ```
 
 ```{r,echo=FALSE,message=FALSE,results='asis'}
+#| hover: true
+
 summary_table <- as.data.frame(summary(mdl)$meta_tables$barebones)[, c('k','N','mean_r','CI_LL_95','CI_UL_95','sd_r','CR_LL_90','CR_UL_90')]
 
 names(summary_table) <- c("$k$","$N$","   $\\bar{r}$   ", "$CI_{L95}$", "$CI_{U95}$","$SD_r$", "$CR_{L90}$", "$CR_{U90}$")
@@ -149,6 +154,7 @@ kable(summary_table,align = 'cccccccc',digits=3)
 #### Artifact Correction Model
 
 ```{r,echo=FALSE,message=FALSE,results='asis'}
+#| hover: true
 
 summary_table <- as.data.frame(summary(mdl)$meta_tables$individual_correction$true_score)[, c('k','N','mean_rho','CI_LL_95','CI_UL_95','sd_rho','CR_LL_90','CR_UL_90')]
 
@@ -162,12 +168,14 @@ kable(summary_table,align = 'cccccccc',digits=3)
 
 ## Moderators
 
-
 #### Disciplines
 
 College disciplines/majors are broken down into broad categories.
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE,results='asis'}
+#| hover: true
+
+
 mdl<- ma_r_ic(data = df,
               rxyi = rxY,
               n = n,
@@ -192,6 +200,9 @@ kable(summary_table,align = 'lccccc',digits=3)
 Whether students took the computer-based UTME rather than the pen-and-paper version (pre-2014).
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE,results='asis'}
+#| hover: true
+
+
 mdl<- ma_r_ic(data = df,
               rxyi = rxY,
               n = n,
@@ -216,6 +227,9 @@ kable(summary_table,align = 'lccccc',digits=3)
 Whether the institution is a university, polytechnic, or college of education.
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE,results='asis'}
+#| hover: true
+
+
 mdl<- ma_r_ic(data = df,
               rxyi = rxY,
               n = n,

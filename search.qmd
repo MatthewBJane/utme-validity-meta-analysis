@@ -10,6 +10,9 @@ Here you will find the current search results and inclusion/exclusion decisions 
 ## Search Results
 
 ```{r,echo=FALSE}
+#| hover: true
+
+
 library(knitr)
 df <- read.csv('search_results.csv')
 kable(df,align = "clccccccc")
