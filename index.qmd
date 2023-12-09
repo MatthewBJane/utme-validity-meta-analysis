@@ -9,6 +9,9 @@ author:
   - name: James Uanhoro
     affiliation:
       - name: University of North Texas
+  - name: James Steele
+    affiliation:
+      - name: Solent University
   - name: Nduka Boika
     affiliation:
       - name: University of North Texas
@@ -18,7 +21,7 @@ author:
   - name: Blair T. Johnson
     affiliation:
       - name: University of Connecticut
-  
+
 description: "The Unified Tertiary Matriculation Examination (UTME) is a standardized test used for university admissions decisions in Nigeria. The examination is administered by the Joint Admissions and Matriculation Board (JAMB). The validity of the UTME in predicting academic performance has been investigated extensively in the literature, therefore this meta-analysis aims to synthesize the current validity evidence. This open-source web-page consists of the results, methodology, and data for a real-time updating meta-analytic database."
 ---
 ```{r,echo=FALSE,message=FALSE,results='asis'}
