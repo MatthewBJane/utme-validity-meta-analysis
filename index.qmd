@@ -9,26 +9,96 @@ author:
   - name: James Uanhoro
     affiliation:
       - name: University of North Texas
+  - name: Nduka Boika
+    affiliation:
+      - name: University of North Texas
+  - name: Lucija Batinovic
+    affiliation:
+      - name: Linköping University
   - name: Blair T. Johnson
     affiliation:
       - name: University of Connecticut
   
 description: "The Unified Tertiary Matriculation Examination (UTME) is a standardized test used for university admissions decisions in Nigeria. The examination is administered by the Joint Admissions and Matriculation Board (JAMB). The validity of the UTME in predicting academic performance has been investigated extensively in the literature, therefore this meta-analysis aims to synthesize the current validity evidence. This open-source web-page consists of the results, methodology, and data for a real-time updating meta-analytic database."
 ---
+```{r,echo=FALSE,message=FALSE,results='asis'}
+# load packages
+library(psychmeta)
+library(knitr)
+library(ggplot2)
+library(ggdist)
+library(latex2exp)
+
+# BLUE color pallette
+text_color_blue      = '#326982ff'
+panel_color_blue     = '#f6fafbff'
+lightmain_color_blue = '#a4cdd9ff'
+main_color_blue      = '#5fa6bcff'
+darkmain_color_blue  = '#397689ff'
+border_color_blue    = '#5fa6bcff'
+
+# RED color pallette
+text_color_red       = '#a62675ff'
+panel_color_red      = '#fdf6faff'
+lightmain_color_red  = '#eeb4d7ff'
+main_color_red       = '#d74ea2ff'
+darkmain_color_red   = '#bf2986ff'
+border_color_red     = '#d74ea2ff'
+
+# Plot theme BLUE
+th_blue <- theme(aspect.ratio = 1,
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        plot.title = element_text(color = text_color_blue),
+        panel.background = element_rect(fill = panel_color_blue),
+        panel.border = element_rect(fill = NA, color = border_color_blue,linewidth=1.2),
+        axis.title = element_text(size=15, color = text_color_blue),
+        axis.text.x = element_text(size=13, color = text_color_blue),
+        axis.text.y = element_text(size=13, color = text_color_blue),
+        axis.ticks = element_line(color = border_color_blue,linewidth=1)) 
+  
+# Plot theme RED
+th_red <- theme(aspect.ratio = 1,
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        plot.title = element_text(color = text_color_red),
+        panel.background = element_rect(fill = panel_color_red),
+        panel.border = element_rect(fill = NA, color = border_color_red,linewidth=1.2),
+        axis.title = element_text(size=15, color = text_color_red),
+        axis.text.x = element_text(size=13, color = text_color_red),
+        axis.text.y = element_text(size=13, color = text_color_red),
+        axis.ticks = element_line(color = border_color_red,linewidth=1)) 
+
+```
+
 
 # Current Results
 
+## Study Selection
+
+```{r,echo=FALSE,message=FALSE,results='asis',warnin}
+library(PRISMAstatement)
+
+sr <- read.csv('search_results.csv')
+
+prisma(found = nrow(sr),
+       found_other = 0,
+       no_dupes = nrow(sr[sr$exclusion_reason!='duplicate',]), 
+       screened = nrow(sr[sr$exclusion_reason!='duplicate',]), 
+       screen_exclusions = 0, 
+       full_text = nrow(sr[sr$exclusion_reason!='duplicate',]),
+       full_text_exclusions = nrow(sr[sr$decision=='exclude',]), 
+       qualitative = nrow(sr[sr$decision=='include',]), 
+       quantitative = nrow(sr[sr$decision=='include',]),
+       width = 800, height = 800)
+
+```
+
 ## Imputing Missing Reliability
 
-The average inter-correlation between each year-end GPA ($\bar{r}_{y_iy_j}$; see Methods) and the number of years that the students attend college, $\kappa$, can be used to estimate the reliability of final cumulative GPA (CGPA) during their time in college. For example, a CGPA calculated from all four years of college is more reliable than a CGPA computed from just their first year in college. Since inter-grade correlations are rarely reported in primary studies, we can take the $N$-weighted average of available inter-grade correlations. Then we can use the number of years the CGPA is calculated from in each study and use those values to estimate the reliability of CGPA in the given study.
+The average inter-correlation between each year-end GPA ($\bar{r}_{y_iy_j}$; see Methods) and the number of years that the students attend college, $\kappa$, can be used to estimate the reliability of final cumulative GPA (CGPA) during their time in college. For example, a CGPA calculated from all four years of college is more reliable than a CGPA computed from just their first year in college. Since inter-grade correlations are rarely reported in primary studies, we can take the $N$-weighted average of available inter-grade correlations to fill in missing values. We then use the number of years of university the study computes the CGPA from and use those values to estimate the reliability of CGPA in the given study.
 
-#### Inter-Grade Correlations
-
-```{r,echo=FALSE,message=FALSE,results='asis'}
-#| hover: true
-
-library(psychmeta)
-library(knitr)
+```{r,echo=FALSE,message=FALSE,results='asis',warning=FALSE}
 df <- read.csv('study_data.csv')
 
 ###################################################
@@ -46,7 +116,6 @@ for(i in 1:7){
 }
 
 
-
 ###################################################
 # analyze data set from Owolabi (2018) ############
 ###################################################
@@ -59,9 +128,7 @@ for(i in 1:7){
   n <- c(n,nrow(ryy_data))
   
   
-  
 reliability <- data.frame(
-  discipline = c('Chemical Engineering', 'Civil Engineering', 'Computer Engineering', 'Electrical Engineering', 'Info. and Comm. Engineering', 'Mechanical Engineering', 'Petroleum Engineering','Accounting', df$discipline[!is.na(df$ave_ryiyj)]),
   n = c(n,df$n[!is.na(df$ave_ryiyj)]),
   ave_ryiyj = round(c(ave_ryiyj,df$ave_ryiyj[!is.na(df$ave_ryiyj)]),3)
 )
@@ -75,9 +142,7 @@ mean_ryiyj <- weighted.mean(x = reliability$ave_ryiyj,
 
 reliability_table <- rbind(reliability,c('WEIGHTED MEAN',sum(reliability$n),round(mean_ryiyj,3)))
 
-names(reliability_table) <- c('Discipline', '$N$','Mean Inter-Year GPA Correlation ($\\bar{r}_{y_iy_j}$)')
 
-kable(reliability_table,align = 'lcc',digits = 3, booktabs = TRUE)
 ```
 
 #### Estimated Reliability
@@ -92,7 +157,7 @@ for(i in k){
 } 
 
 rYY_table <- data.frame(k,rYY)
-names(rYY_table) <- c('# of Academic Years ($\\kappa$)','Estimated Reliability ($r_{YY\'}$)')
+names(rYY_table) <- c('# of Academic Years $(\\kappa)$','Estimated Reliability $(r_{YY\'})$')
 
 kable(rYY_table,align = 'cc',digits = 3) 
 ```
@@ -138,6 +203,8 @@ mdl<- ma_r_ic(data = df,
               correction_method = "uvirr_x",
               control = control_psychmeta(cred_level = .90)
               )
+
+
 
 ```
 
@@ -189,38 +256,42 @@ mdl<- ma_r_ic(data = df,
               )
 
 summary_table <- as.data.frame(summary(mdl)$meta_tables$individual_correction$true_score)[, c('discipline_category','k','N','mean_rho','CI_LL_95','CI_UL_95','sd_rho','CR_LL_90','CR_UL_90')]
+summary_table$CI_UL_95[summary_table$CI_UL_95 >1] = 1
+summary_table$CR_UL_90[summary_table$CR_UL_90 >1] = 1
+summary_table$CI_UL_95[summary_table$CI_UL_95 < -1] = -1
+summary_table$CR_UL_90[summary_table$CR_UL_90 < -1] = -1
 
-names(summary_table) <- c("Discipline","$k$","$N$","$\\hat{\\bar{\\rho}}$", "$CI_{L95}$", "$CI_{U95}$","$SD_\\rho$", "$CR_{L90}$", "$CR_{U90}$")
+# names(summary_table) <- c("Discipline","$k$","$N$","$\\hat{\\bar{\\rho}}$", "$CI_{L95}$", "$CI_{U95}$","$SD_\\rho$", "$CR_{L90}$", "$CR_{U90}$")
+# 
+# kable(summary_table,align = 'lccccc',digits=3)
 
-kable(summary_table,align = 'lccccc',digits=3)
+
+ggplot(data=summary_table, aes(x=mean_rho,y=discipline_category)) +
+  geom_errorbarh(aes(xmax = CR_LL_90, xmin = CR_UL_90, 
+                     height = 0),linewidth=1,color=main_color_red) + 
+  geom_errorbarh(aes(xmax = CI_LL_95, xmin = CI_UL_95, 
+                     height = 0),linewidth=2,color=darkmain_color_red) + 
+  theme_minimal() + th_red +
+  geom_point(shape=18,size=6,color=darkmain_color_red) +
+  xlim(-.5,1) +
+  geom_vline(xintercept = 0,linetype='dashed') +
+  annotate(geom='text',
+           x=summary_table$mean_rho,
+           y=summary_table$discipline_category,
+           label=round(summary_table$mean_rho,2),
+           vjust=2.2, color=text_color_red) +
+  theme(aspect.ratio=1) + 
+  ylab('') +
+  xlab(TeX('Predictive Validity (\\bar{\\rho})'))
 ```
 
-#### Computer Based UTME
-
-Whether students took the computer-based UTME rather than the pen-and-paper version (pre-2014).
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE,results='asis'}
-#| hover: true
-
-
-mdl<- ma_r_ic(data = df,
-              rxyi = rxY,
-              n = n,
-              ux = ux,
-              ryy = rYY,
-              wt_type = "PM",
-              correct_bias = TRUE,
-              correction_method = "uvirr_x",
-              moderators = computer_based_utme,
-              control = control_psychmeta(cred_level = .90)
-              )
-
-summary_table <- as.data.frame(summary(mdl)$meta_tables$individual_correction$true_score)[, c('computer_based_utme','k','N','mean_rho','CI_LL_95','CI_UL_95','sd_rho','CR_LL_90','CR_UL_90')]
-
 names(summary_table) <- c("Computer Based","$k$","$N$","$\\hat{\\bar{\\rho}}$", "$CI_{L95}$", "$CI_{U95}$","$SD_\\rho$", "$CR_{L90}$", "$CR_{U90}$")
 
 kable(summary_table,align = 'lccccc',digits=3)
 ```
+
 
 #### Type of Institution
 
@@ -243,8 +314,34 @@ mdl<- ma_r_ic(data = df,
               )
 
 summary_table <- as.data.frame(summary(mdl)$meta_tables$individual_correction$true_score)[, c('institution_type','k','N','mean_rho','CI_LL_95','CI_UL_95','sd_rho','CR_LL_90','CR_UL_90')]
+summary_table$CI_UL_95[summary_table$CI_UL_95 >1] = 1
+summary_table$CR_UL_90[summary_table$CR_UL_90 >1] = 1
+summary_table$CI_UL_95[summary_table$CI_UL_95 < -1] = -1
+summary_table$CR_UL_90[summary_table$CR_UL_90 < -1] = -1
 
+
+ggplot(data=summary_table, aes(x=mean_rho,y=institution_type)) +
+  geom_errorbarh(aes(xmax = CR_LL_90, xmin = CR_UL_90, height = 0),linewidth=1,color=main_color_red) + 
+  geom_errorbarh(aes(xmax = CI_LL_95, xmin = CI_UL_95, height = 0),linewidth=2,color=darkmain_color_red) + 
+  theme_minimal() + th_red +
+  geom_point(shape=18,size=6,color=darkmain_color_red) +
+  xlim(-.5,1) +
+  geom_vline(xintercept = 0,linetype='dashed') +
+  annotate(geom='text',
+           x=summary_table$mean_rho,
+           y=summary_table$institution_type,
+           label=round(summary_table$mean_rho,2),
+           vjust=3, color=text_color_red) +
+  ylab('') +
+  theme(aspect.ratio=1) + 
+  xlab(TeX('Predictive Validity (\\bar{\\rho})'))
+  
+```
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,results='asis'}
 names(summary_table) <- c("Institution Type","$k$","$N$","$\\hat{\\bar{\\rho}}$", "$CI_{L95}$", "$CI_{U95}$","$SD_\\rho$", "$CR_{L90}$", "$CR_{U90}$")
 
 kable(summary_table,align = 'lccccc',digits=3)
+
 ```

@@ -4,7 +4,7 @@ bibliography: references.bib
 
 # Methodology
 
-A lot of the methodology described below is described further in @hunter1990,  @wiernik2020, and @jané2023.
+A lot of the methodology described below is described further in @hunter1990, @wiernik2020, and @jané2023.
 
 ## Defining the Estimand
 
@@ -40,14 +40,14 @@ ggplot(data=NULL) +
   theme_ggdist() + 
   theme(panel.background = element_rect(fill='transparent'),
          plot.background = element_rect(fill='transparent', color=NA),
-        axis.line = element_line(color='grey90'),
-        axis.text = element_text(color='grey90',size = 13),
-        axis.title = element_text(color='grey90',size = 15),
+        axis.line = element_line(color='grey20'),
+        axis.text = element_text(color='grey20',size = 13),
+        axis.title = element_text(color='grey20',size = 15),
         aspect.ratio = .5)+
   geom_xspline(aes(x = bin_midpoint, y = admitted),
-               spline_shape = -.4, color = 'gold') +
+               spline_shape = -.4, color = 'gold3') +
   geom_xspline(aes(x = bin_midpoint, y = applicants),
-               spline_shape = -.4, color = 'skyblue') +
+               spline_shape = -.4, color = 'skyblue3') +
   geom_point(aes(x = bin_midpoint, y = admitted), shape=15,color='gold3',size=4) +
   geom_point(aes(x = bin_midpoint, y = applicants), shape=15,color='skyblue3',size=4) +
   scale_y_continuous(breaks = c(0, 200000, 400000, 600000, 800000),
@@ -59,10 +59,10 @@ ggplot(data=NULL) +
   ylab('Number of Students') +
   annotate(geom='text',x=270, y = 800000, 
            label=paste0('Applicants'),
-           color='skyblue',size=6, hjust='left') + 
+           color='skyblue3',size=6, hjust='left') + 
   annotate(geom='text',x=270, y = 700000, 
            label='Admitted',
-           color='gold',size=6, hjust='left')
+           color='gold3',size=6, hjust='left')
 
 ```
 
@@ -78,7 +78,9 @@ Cumulative grade-point averages (CGPA), like any measure, contains measurement e
 
 $$
 Y = \frac{1}{\kappa}\sum_{i=1}^\kappa y_i
-$$ For example, if a student obtains a GPA of 3.12 in their first year, 3.03 in their second year, 2.98 in their third year, and 3.43 in their last year, then they would have a CGPA of
+$$
+
+For example, if a student obtains a GPA of 3.12 in their first year, 3.03 in their second year, 2.98 in their third year, and 3.43 in their last year, then they would have a CGPA of
 
 $$
 Y = \frac{1}{4}\times(3.12+3.03+2.98+3.43)=3.14.
